@@ -1,0 +1,173 @@
+file:
+  /etc/audit/audit.rules:
+    exists: true
+    filetype: file
+    contains:
+    - -a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change
+    - -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change
+    - -a always,exit -F arch=b64 -S clock_settime -k time-change
+    - -a always,exit -F arch=b32 -S clock_settime -k time-change
+    - -w /etc/localtime -p wa -k time-change
+    - -w /etc/group -p wa -k identity
+    - -w /etc/passwd -p wa -k identity
+    - -w /etc/gshadow -p wa -k identity
+    - -w /etc/shadow -p wa -k identity
+    - -w /etc/security/opasswd -p wa -k identity
+    - -a exit,always -F arch=b64 -S sethostname -S setdomainname -k system-locale
+    - -a exit,always -F arch=b32 -S sethostname -S setdomainname -k system-locale
+    - -w /etc/issue -p wa -k system-locale
+    - -w /etc/issue.net -p wa -k system-locale
+    - -w /etc/hosts -p wa -k system-locale
+    - -w /etc/network -p wa -k system-locale
+    - -w /etc/selinux/ -p wa -k MAC-policy
+    - -w /var/log/faillog -p wa -k logins
+    - -w /var/log/lastlog -p wa -k logins
+    - -w /var/log/tallylog -p wa -k logins
+    - -w /var/run/utmp -p wa -k session
+    - -w /var/log/wtmp -p wa -k session
+    - -w /var/log/btmp -p wa -k session
+    - -a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295
+      -k perm_mod
+    - -a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295
+      -k perm_mod
+    - -a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000
+      -F auid!=4294967295 -k perm_mod
+    - -a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000
+      -F auid!=4294967295 -k perm_mod
+    - -a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr
+      -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+    - -a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr
+      -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+    - -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate
+      -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+    - -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate
+      -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+    - -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate
+      -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+    - -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate
+      -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+    - -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
+    - -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
+    - -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000
+      -F auid!=4294967295 -k delete
+    - -a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000
+      -F auid!=4294967295 -k delete
+    - -w /etc/sudoers -p wa -k scope
+    - -w /var/log/sudo.log -p wa -k actions
+    - -w /sbin/insmod -p x -k modules
+    - -w /sbin/rmmod -p x -k modules
+    - -w /sbin/modprobe -p x -k modules
+    - -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+  /etc/default/grub:
+    exists: true
+    filetype: file
+    contains:
+    - /GRUB_CMDLINE_LINUX=".*audit=1/
+package:
+  apparmor:
+    installed: true
+  apparmor-profiles:
+    installed: true
+  apparmor-utils:
+    installed: true
+  auditd:
+    installed: true
+command:
+  /sbin/lsmod | grep cramfs:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep freevxfs:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep hfs:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep hfsplus:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep jffs2:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep squashfs:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/lsmod | grep udf:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v cramfs:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v freevxfs:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v hfs:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v hfsplus:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v jffs2:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v squashfs:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  /sbin/modprobe -n -v udf:
+    exit-status: 0
+    stdout:
+    - install /bin/true
+    stderr: []
+    timeout: 10000
+  apparmor_status:
+    exit-status: 0
+    stdout:
+    - /^0 profiles are in complain mode./
+    - /^0 processes are unconfined/
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d/S*auditd:
+    exit-status: 0
+    stdout:
+    - \/etc/rc2.d/S01auditd
+    - \/etc/rc3.d/S01auditd
+    - \/etc/rc4.d/S01auditd
+    - \/etc/rc5.d/S01auditd
+    stderr: []
+    timeout: 10000
+  tail -n 1 /etc/audit/audit.rules:
+    exit-status: 0
+    stdout: ["-e 2"]
+    stderr: []
+    timeout: 10000

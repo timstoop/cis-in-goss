@@ -1,0 +1,376 @@
+file:
+  /boot/grub/grub.cfg:
+    exists: true
+    mode: "0440"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - /^set superusers=".+"/
+    - /^password_pbkdf2[[:space:]].+[[:space:]].+/
+  /etc/default/rsync:
+    exists: true
+    filetype: file
+    contains:
+    - RSYNC_ENABLE=false
+  /etc/fstab:
+    exists: true
+    filetype: file
+    contains:
+    - /[[:space:]]\/tmp[[:space:]]/
+    - /[[:space:]]\/tmp[[:space:]].*nodev/
+    - /[[:space:]]\/tmp[[:space:]].*nosuid/
+    - /[[:space:]]\/tmp[[:space:]].*noexec/
+    - /[[:space:]]\/var[[:space:]]/
+    - /^\/tmp[[:space:]].*[[:space:]]\/var\/tmp[[:space:]].*[[:space:]]bind[[:space:]]/
+    - /[[:space:]]\/var\/log[[:space:]]/
+    - /[[:space:]]\/var\/log\/audit[[:space:]]/
+    - /[[:space:]]\/home[[:space:]]/
+    - /[[:space:]]\/home[[:space:]].*nodev/
+    - /[[:space:]]\/run\/shm[[:space:]].*nodev/
+    - /[[:space:]]\/run\/shm[[:space:]].*nosuid/
+    - /[[:space:]]\/run\/shm[[:space:]].*noexec/
+  /etc/grub.d/10_linux:
+    exists: true
+    filetype: file
+    contains:
+    - /^CLASS=.+--unrestricted/
+  /etc/hosts.allow:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /etc/hosts.deny:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - 'ALL: ALL'
+  /etc/inetd.conf:
+    exists: true
+    filetype: file
+    contains:
+    - "!/^shell\b/"
+    - "!/^login\b/"
+    - "!/^exec\b/"
+    - "!/^talk\b/"
+    - "!/^ntalk\b/"
+    - "!/^telnet\b/"
+    - "!/^tftp\b/"
+    - "!/^chargen\b/"
+    - "!/^daytime\b/"
+    - "!/^echo\b/"
+    - "!/^discard\b/"
+    - "!/^time\b/"
+  /etc/init.d/ntp:
+    exists: true
+    filetype: file
+    contains:
+    - /RUNASUSER=ntp/
+  /etc/ntp.conf:
+    exists: true
+    filetype: file
+    contains:
+    - /restrict -4 default kod .*nomodify/
+    - /restrict -4 default kod .*notrap/
+    - /restrict -4 default kod .*nopeer/
+    - /restrict -4 default kod .*noquery/
+    - /restrict -6 default kod .*nomodify/
+    - /restrict -6 default kod .*notrap/
+    - /restrict -6 default kod .*nopeer/
+    - /restrict -6 default kod .*noquery/
+    - /^server$/
+  /etc/security/limits.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - '* hard core 0'
+  /etc/shadow:
+    exists: true
+    mode: "0640"
+    owner: root
+    group: shadow
+    filetype: file
+    contains:
+    - '!/^root:[*\!]:/'
+  /proc/mounts:
+    exists: true
+    linked-to: self/mounts
+    filetype: symlink
+    contains:
+    - /[[:space:]]\/tmp[[:space:]].*nodev/
+    - /[[:space:]]\/tmp[[:space:]].*nosuid/
+    - /[[:space:]]\/tmp[[:space:]].*noexec/
+    - /^\/tmp[[:space:]].*[[:space:]]\/var\/tmp[[:space:]].*[[:space:]]bind[[:space:]]/
+    - /[[:space:]]\/home[[:space:]].*nodev/
+    - /[[:space:]]\/run\/shm[[:space:]].*nodev/
+    - /[[:space:]]\/run\/shm[[:space:]].*nosuid/
+    - /[[:space:]]\/run\/shm[[:space:]].*noexec/
+package:
+  iptables:
+    installed: true
+  iptables-persistent:
+    installed: true
+  nis:
+    installed: false
+  ntp:
+    installed: true
+  prelink:
+    installed: false
+  rsh-client:
+    installed: false
+  rsh-redone-client:
+    installed: false
+  rsyslog:
+    installed: true
+  slapd:
+    installed: false
+  talk:
+    installed: false
+  tcpd:
+    installed: true
+  xserver-xorg-core:
+    installed: false
+port:
+  tcp:25:
+    listening: true
+    ip:
+    - 127.0.0.1
+command:
+  df --local -P | awk {'if (NR!=1) print '} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null:
+    exit-status: 123
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep apache2:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep autofs:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep avahi-daemon:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep bind9:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep cups:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep dovecot:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep isc-dhcp-server:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep nfs-kernel-server:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep nginx:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep rpcbind:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep samba:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep snmpd:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep squid3:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep vsftpd:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d | grep xinetd:
+    exit-status: 1
+    stdout: []
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d/S*iptables-persistent:
+    exit-status: 0
+    stdout:
+    - /etc/rc2.d/S01iptables-persistent
+    - /etc/rc3.d/S01iptables-persistent
+    - /etc/rc4.d/S01iptables-persistent
+    - /etc/rc5.d/S01iptables-persistent
+    stderr: []
+    timeout: 10000
+  ls /etc/rc*.d/S*rsyslog:
+    exit-status: 0
+    stdout:
+    - \/etc/rc2.d/S01rsyslog
+    - \/etc/rc3.d/S01rsyslog
+    - \/etc/rc4.d/S01rsyslog
+    - \/etc/rc5.d/S01rsyslog
+    stderr: []
+    timeout: 10000
+  sysctl fs.suid_dumpable:
+    exit-status: 0
+    stdout:
+    - fs.suid_dumpable = 0
+    stderr: []
+    timeout: 10000
+  sysctl kernel.randomize_va_space:
+    exit-status: 0
+    stdout:
+    - kernel.randomize_va_space = 2
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.accept_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.accept_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.accept_source_route:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.accept_source_route = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.log_martians:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.log_martians = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.rp_filter:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.rp_filter = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.secure_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.secure_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.all.send_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.all.send_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.accept_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.accept_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.accept_source_route:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.accept_source_route = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.log_martians:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.log_martians = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.rp_filter:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.rp_filter = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.secure_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.secure_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.conf.default.send_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv4.conf.default.send_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.icmp_echo_ignore_broadcasts:
+    exit-status: 0
+    stdout:
+    - net.ipv4.icmp_echo_ignore_broadcasts = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.icmp_ignore_bogus_error_responses:
+    exit-status: 0
+    stdout:
+    - net.ipv4.icmp_ignore_bogus_error_responses = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.ip_forward:
+    exit-status: 0
+    stdout:
+    - net.ipv4.ip_forward = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv4.tcp_syncookies:
+    exit-status: 0
+    stdout:
+    - net.ipv4.tcp_syncookies = 1
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv6.conf.all.accept_ra:
+    exit-status: 0
+    stdout:
+    - net.ipv6.conf.all.accept_ra = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv6.conf.all.accept_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv6.conf.all.accept_redirects = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv6.conf.default.accept_ra:
+    exit-status: 0
+    stdout:
+    - net.ipv6.conf.default.accept_ra = 0
+    stderr: []
+    timeout: 10000
+  sysctl net.ipv6.conf.default.accept_redirects:
+    exit-status: 0
+    stdout:
+    - net.ipv6.conf.default.accept_redirects = 0
+    stderr: []
+    timeout: 10000
