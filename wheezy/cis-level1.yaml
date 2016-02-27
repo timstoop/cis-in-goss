@@ -237,6 +237,15 @@ command:
     stdout: []
     stderr: []
     timeout: 10000
+  ls /etc/rc*.d/S*cron:
+    exit-status: 0
+    stdout:
+    - \/etc/rc2.d/S04cron
+    - \/etc/rc3.d/S04cron
+    - \/etc/rc4.d/S04cron
+    - \/etc/rc5.d/S04cron
+    stderr: []
+    timeout: 10000
   ls /etc/rc*.d/S*iptables-persistent:
     exit-status: 0
     stdout:
