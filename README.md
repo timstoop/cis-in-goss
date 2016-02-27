@@ -5,6 +5,8 @@ Honestly, this is just an exercise to see if I could make a useful checklist, qu
 - Debian Wheezy
 - 64 bit machine
 
+It checks against the [CIS Security Benchmarks](https://benchmarks.cisecurity.org/) for Wheezy, version v1.0.0 - 12-31-2015.
+
 ## Usage
 
 First, install [goss](https://github.com/aelsabbahy/goss).
@@ -27,3 +29,5 @@ Still under heavy development. Pull requests are appreciated!
 - Check with the actual CIS Benchmark.
 - Create a version for Jessie as well.
 - Add comments describing which section the check is for.
+- Items that cannot be easily transcribed into single checks:
+  - 8.2.4 (checks files that are mentioned in rsyslog.conf)

@@ -58,6 +58,15 @@ file:
     - -w /sbin/rmmod -p x -k modules
     - -w /sbin/modprobe -p x -k modules
     - -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+    - -e 2
+  /etc/audit/auditd.conf:
+    exists: true
+    mode: "0640"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - max_log_file_action = keep_logs
   /etc/default/grub:
     exists: true
     filetype: file
@@ -168,6 +177,7 @@ command:
     timeout: 10000
   tail -n 1 /etc/audit/audit.rules:
     exit-status: 0
-    stdout: ["-e 2"]
+    stdout:
+    - -e 2
     stderr: []
     timeout: 10000
