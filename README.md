@@ -31,3 +31,10 @@ Still under heavy development. Pull requests are appreciated!
 - Add comments describing which section the check is for.
 - Items that cannot be easily transcribed into single checks:
   - 8.2.4 (checks files that are mentioned in rsyslog.conf)
+  - 8.2.5 (checks whether rsyslog sends log to remote server, we can only check if it is send, but we cannot know the destination)
+
+## Assorted notes
+
+### Regarding 8.3.2 (Aide cronjob)
+
+I personally do not recommend implementing a cronjob in a crontab on /var/spool. It's part of the system configuration, which to me means it should go in /etc. I'm implementing the supplied spec, however, so the check is performed as dictated on the personal crontab of root.

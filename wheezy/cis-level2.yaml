@@ -73,6 +73,8 @@ file:
     contains:
     - /GRUB_CMDLINE_LINUX=".*audit=1/
 package:
+  aide:
+    installed: true
   apparmor:
     installed: true
   apparmor-profiles:
@@ -164,6 +166,12 @@ command:
     stdout:
     - /^0 profiles are in complain mode./
     - /^0 processes are unconfined/
+    stderr: []
+    timeout: 10000
+  crontab -u root -l | grep aide:
+    exit-status: 0
+    stdout:
+    - 0 5 * * * /usr/sbin/aide --check
     stderr: []
     timeout: 10000
   ls /etc/rc*.d/S*auditd:

@@ -84,6 +84,14 @@ file:
     - /restrict -6 default kod .*nopeer/
     - /restrict -6 default kod .*noquery/
     - /^server$/
+  /etc/rsyslog.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - /*\.* @@.*/
   /etc/security/limits.conf:
     exists: true
     mode: "0644"
