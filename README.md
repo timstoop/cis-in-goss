@@ -5,7 +5,7 @@ Honestly, this is just an exercise to see if I could make a useful checklist, qu
 - Debian Wheezy
 - 64 bit machine
 
-It checks against the [CIS Security Benchmarks](https://benchmarks.cisecurity.org/) for Wheezy, version v1.0.0 - 12-31-2015.
+It checks against the [CIS Security Benchmarks](https://benchmarks.cisecurity.org/) for Wheezy, version v1.0.0 - 12-31-2015. I'm currently trying to add all scored items, some non-scored do get in as well. In developer terms, a missing scored item is a bug, a missing non-scored item is a feature request.
 
 ## Usage
 
